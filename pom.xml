@@ -93,7 +93,7 @@
     <dependency>
       <groupId>com.gaian.services</groupId>
       <artifactId>voxa-lib</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.6</version>
       <exclusions>
         <exclusion>
           <artifactId>lombok</artifactId>
