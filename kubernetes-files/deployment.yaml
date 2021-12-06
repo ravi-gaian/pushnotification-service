@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pushnotification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pushnotification-service
+  template:
+    metadata:
+      name: pushnotification-service
+      labels:
+        app: pushnotification-service
+        version: v1
+    spec:
+      containers:
+      - name: pushnotification-service
+        image: REG/IMAGE:TAG
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "1.8Gi"
+            cpu: "450m"
+          limits:
+            memory: "2Gi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+        env:
+          - name: VERSION
+            value: "v1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pushnotification-service
+  labels:
+    app: pushnotification-service
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      name: http
+  selector:
+    app: pushnotification-service
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: pushnotification-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: twitter-service
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
