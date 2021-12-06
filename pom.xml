@@ -350,7 +350,7 @@
       </resource>
     </resources>
 
-    <finalName>twitter-service</finalName>
+    <finalName>pushnotification-service</finalName>
   </build>
 
   <repositories>
